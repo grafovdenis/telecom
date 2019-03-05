@@ -1,0 +1,77 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{import} \PYG{n+nn}{matplotlib.pyplot} \PYG{k+kn}{as} \PYG{n+nn}{plt}
+\PYG{k+kn}{import} \PYG{n+nn}{numpy} \PYG{k+kn}{as} \PYG{n+nn}{np}
+
+
+\PYG{c+c1}{\PYGZsh{} x(t) = A * sin(w*t + fi\PYGZus{}0)}
+\PYG{k}{def} \PYG{n+nf}{sine\PYGZus{}wave}\PYG{p}{(}\PYG{n}{freq}\PYG{o}{=}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{n}{show}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{,} \PYG{n}{save}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{):}
+    \PYG{n}{fs} \PYG{o}{=} \PYG{l+m+mi}{1000}  \PYG{c+c1}{\PYGZsh{} sampling rate}
+    \PYG{n}{ts} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{/} \PYG{n}{fs}  \PYG{c+c1}{\PYGZsh{} sampling interval}
+    \PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{8192}  \PYG{c+c1}{\PYGZsh{} number of fft points, pick power of 2}
+    \PYG{n}{t} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{n} \PYG{o}{*} \PYG{n}{ts}\PYG{p}{,} \PYG{n}{ts}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} time vector}
+    \PYG{n}{sig} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pi} \PYG{o}{*} \PYG{n}{freq} \PYG{o}{*} \PYG{n}{t}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} signal}
+    \PYG{n}{sig\PYGZus{}fft} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{fft}\PYG{o}{.}\PYG{n}{fft}\PYG{p}{(}\PYG{n}{sig}\PYG{p}{)} \PYG{o}{/} \PYG{n}{n} \PYG{o}{*} \PYG{l+m+mi}{2}  \PYG{c+c1}{\PYGZsh{} /N to scale due to python DFT equation,}
+    \PYG{c+c1}{\PYGZsh{} *2 to make single sided}
+    \PYG{n}{fft\PYGZus{}freq} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{fft}\PYG{o}{.}\PYG{n}{fftfreq}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{ts}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} python function to get Hz frequency axis}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mi}{250}\PYG{p}{],} \PYG{n}{sig}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mi}{250}\PYG{p}{])}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}time (S)\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}amplitude (V)\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n+nb+bp}{True}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{save}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}../out/sine\PYGZus{}time.png\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{show}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{fft\PYGZus{}freq}\PYG{p}{[:}\PYG{n}{fs}\PYG{p}{],} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{sig\PYGZus{}fft}\PYG{p}{)[:}\PYG{n}{fs}\PYG{p}{])}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}frequency (Hz)\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}amplitude (V)\PYGZsq{}}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} plt.plot(fft\PYGZus{}freq[:n // 2], 20 * np.log10(abs((sig\PYGZus{}fft[:n // 2]))))}
+    \PYG{c+c1}{\PYGZsh{} plt.ylabel(\PYGZsq{}amplitude (dB20(V))\PYGZsq{})}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n+nb+bp}{True}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{save}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}../out/sine\PYGZus{}freq.png\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{show}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+
+\PYG{c+c1}{\PYGZsh{} x(t) = sign(sin(t))}
+\PYG{k}{def} \PYG{n+nf}{square\PYGZus{}wave}\PYG{p}{(}\PYG{n}{freq}\PYG{o}{=}\PYG{l+m+mi}{20}\PYG{p}{,} \PYG{n}{show}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{,} \PYG{n}{save}\PYG{o}{=}\PYG{n+nb+bp}{False}\PYG{p}{):}
+    \PYG{n}{fs} \PYG{o}{=} \PYG{l+m+mi}{1000}  \PYG{c+c1}{\PYGZsh{} sampling rate}
+    \PYG{n}{ts} \PYG{o}{=} \PYG{l+m+mi}{1} \PYG{o}{/} \PYG{n}{fs}  \PYG{c+c1}{\PYGZsh{} sampling interval}
+    \PYG{n}{n} \PYG{o}{=} \PYG{l+m+mi}{8192}  \PYG{c+c1}{\PYGZsh{} number of fft points, pick power of 2}
+    \PYG{n}{t} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{arange}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{n} \PYG{o}{*} \PYG{n}{ts}\PYG{p}{,} \PYG{n}{ts}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} time vector}
+    \PYG{n}{sig} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{sign}\PYG{p}{(}\PYG{n}{np}\PYG{o}{.}\PYG{n}{cos}\PYG{p}{(}\PYG{l+m+mi}{2} \PYG{o}{*} \PYG{n}{np}\PYG{o}{.}\PYG{n}{pi} \PYG{o}{*} \PYG{n}{freq} \PYG{o}{*} \PYG{n}{t}\PYG{p}{))}  \PYG{c+c1}{\PYGZsh{} signal}
+    \PYG{n}{sig\PYGZus{}fft} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{fft}\PYG{o}{.}\PYG{n}{fft}\PYG{p}{(}\PYG{n}{sig}\PYG{p}{)} \PYG{o}{/} \PYG{n}{n} \PYG{o}{*} \PYG{l+m+mi}{2}  \PYG{c+c1}{\PYGZsh{} /N to scale due to python DFT equation,}
+    \PYG{c+c1}{\PYGZsh{} *2 to make single sided}
+    \PYG{n}{fft\PYGZus{}freq} \PYG{o}{=} \PYG{n}{np}\PYG{o}{.}\PYG{n}{fft}\PYG{o}{.}\PYG{n}{fftfreq}\PYG{p}{(}\PYG{n}{n}\PYG{p}{,} \PYG{n}{ts}\PYG{p}{)}  \PYG{c+c1}{\PYGZsh{} python function to get Hz frequency axis}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{t}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mi}{250}\PYG{p}{],} \PYG{n}{sig}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{:}\PYG{l+m+mi}{250}\PYG{p}{])}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}time (S)\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}amplitude (V)\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n+nb+bp}{True}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{save}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}../out/square\PYGZus{}time.png\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{show}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{figure}\PYG{p}{()}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{plot}\PYG{p}{(}\PYG{n}{fft\PYGZus{}freq}\PYG{p}{[:}\PYG{n}{fs}\PYG{p}{],} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n}{sig\PYGZus{}fft}\PYG{p}{)[:}\PYG{n}{fs}\PYG{p}{])}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{xlabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}frequency (Hz)\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{ylabel}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}amplitude (V)\PYGZsq{}}\PYG{p}{)}
+    \PYG{c+c1}{\PYGZsh{} plt.plot(fft\PYGZus{}freq[:n // 2], 20 * np.log10(abs((sig\PYGZus{}fft[:n // 2]))))}
+    \PYG{c+c1}{\PYGZsh{} plt.ylabel(\PYGZsq{}amplitude (dB20(V))\PYGZsq{})}
+    \PYG{n}{plt}\PYG{o}{.}\PYG{n}{grid}\PYG{p}{(}\PYG{n+nb+bp}{True}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{save}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{savefig}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}../out/square\PYGZus{}freq.png\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{show}\PYG{p}{:}
+        \PYG{n}{plt}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+
+
+\PYG{k}{if} \PYG{n+nv+vm}{\PYGZus{}\PYGZus{}name\PYGZus{}\PYGZus{}} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}\PYGZus{}\PYGZus{}main\PYGZus{}\PYGZus{}\PYGZsq{}}\PYG{p}{:}
+    \PYG{n}{sine\PYGZus{}wave}\PYG{p}{(}\PYG{n}{show}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{save}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+    \PYG{n}{square\PYGZus{}wave}\PYG{p}{(}\PYG{n}{show}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{,} \PYG{n}{save}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+\end{Verbatim}
