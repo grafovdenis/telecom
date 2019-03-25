@@ -2,13 +2,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 
-# x(t) = A * sin(w*t + fi_0)
+# x(t) = A * sin(2 * pi * w * t)
 def sine_wave(freq=20, show=False, save=False):
     fs = 1000  # sampling rate
     ts = 1 / fs  # sampling interval
     n = 8192  # number of fft points, pick power of 2
     t = np.arange(0, n * ts, ts)  # time vector
-    sig = np.cos(2 * np.pi * freq * t)  # signal
+    sig = np.sin(2 * np.pi * freq * t)  # signal
     sig_fft = np.fft.fft(sig) / n * 2  # /N to scale due to python DFT equation,
     # *2 to make single sided
     fft_freq = np.fft.fftfreq(n, ts)  # python function to get Hz frequency axis
@@ -42,7 +42,7 @@ def square_wave(freq=20, show=False, save=False):
     ts = 1 / fs  # sampling interval
     n = 8192  # number of fft points, pick power of 2
     t = np.arange(0, n * ts, ts)  # time vector
-    sig = np.sign(np.cos(2 * np.pi * freq * t))  # signal
+    sig = np.sign(np.sin(2 * np.pi * freq * t))  # signal
     sig_fft = np.fft.fft(sig) / n * 2  # /N to scale due to python DFT equation,
     # *2 to make single sided
     fft_freq = np.fft.fftfreq(n, ts)  # python function to get Hz frequency axis
