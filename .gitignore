@@ -36,3 +36,5 @@
 *.tdo
 *.nls
 .idea/
+.ipynb_checkpoints
+_minted-report
